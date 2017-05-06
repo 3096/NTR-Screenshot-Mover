@@ -36,6 +36,7 @@
 bin/
 build/
 lib/
+*.sh
 *.3dsx
 *.smdh
 *~
