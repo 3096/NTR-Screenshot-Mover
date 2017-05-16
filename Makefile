@@ -34,6 +34,15 @@ DATA		:=	data
 INCLUDES	:=	include
 #ROMFS		:=	romfs
 
+GITREV  := $(shell git rev-parse HEAD 2>/dev/null | cut -c1-8)
+VERSION	:=	v0.1-$(GITREV)
+
+APP_TITLE	:=	NTR Screenshot Mover
+APP_DESCRIPTION	:=	Move NTR Screenshots out of SD root directory.
+APP_AUTHOR	:=	3096
+
+ICON        := meta/icon.png
+
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------

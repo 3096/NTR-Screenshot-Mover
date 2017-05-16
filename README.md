@@ -16,6 +16,7 @@ I have never actually learned C, and my knowledge about how memories or pointers
 
 ## To do list:
 
+- Figure out how to build .cia
 - Optionally, launch BootNTRSelector when done
 - Custom paths
 

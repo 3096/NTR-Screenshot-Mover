@@ -68,7 +68,7 @@ void mvSSFiles() {
 				strcat(cTargetDir, SS_FORMAT);
 
 				if(rename(cFilePath, cTargetDir) == 0)
-					printf("Moved %s to %s\n", cFilePath, cTargetDir);
+					printf("Moved %s to\n %s\n", cFilePath, cTargetDir);
 			}
 		}
 
@@ -82,7 +82,7 @@ int main(int argc, char **argv) {
 	consoleInit(GFX_TOP, NULL);
 
 	printf("Press A to move NTR Screenshots\n");
-	printf("Press START to quit\n");
+	printf("Press START to quit\n\n");
 
 	// Main loop
 	while (aptMainLoop()) {
