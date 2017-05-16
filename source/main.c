@@ -1,56 +1,78 @@
 #include <string.h>
-#include <dirent.h>
 #include <stdio.h>
+
+#include <dirent.h>
 
 #include <3ds.h>
 
-// get file modification time in a formated string
-char * getFileTime(char filePath[]) {
+// get file modification time in a formatted string
+void getFileTimeStr(char * filePath, char * timeStr) {
 	u64 mtime;
 	sdmc_getmtime(filePath, &mtime);
-	// function not finished, needs format string
-	return NULL;
+	time_t ft = mtime;
+	struct tm *ftm = gmtime(&ft);
+	strftime(timeStr, 16, "%Y%m%d-%H%M%S", ftm);
+	return;
 }
 
-// function name not final
-void mvFiles() {
-	const char *TOP_SS_NAME_PREFIX = "top_";
-	const char *BOT_SS_NAME_PREFIX = "bot_";
+// move screenshot files
+void mvSSFiles() {
+	const char *TOP_PREFIX = "top_";
+	const char *BOT_PREFIX = "bot_";
 	const char *SS_FORMAT = ".bmp";
 
-	DIR           *d;
-	struct dirent *dir;
-	d = opendir("/");
+	const char *TARGET_DIR = "/Screenshots/";
+	const char *TARGET_PREFIX = "Screenshot_";
+	const char *TOP_TARGET_SUFFIX = "-top";
+	const char *BOT_TARGET_SUFFIX = "-bot";
 
-	if (d)
+	// check if Screenshots dir exists
+	struct stat st = {0};
+	if (stat(TARGET_DIR, &st) == -1) {
+	    mkdir(TARGET_DIR, 0700);
+	}
+
+	DIR           *rootDir;
+	struct dirent *rootDirEnt;
+	rootDir = opendir("/");
+
+	if (rootDir)
 	{
-		while ((dir = readdir(d)) != NULL)
+		while ((rootDirEnt = readdir(rootDir)) != NULL)
 		{
-			char *cFileFormat = strrchr(dir->d_name, '.');
+			char *cFileFormat = strrchr(rootDirEnt->d_name, '.');
 			if(cFileFormat && strcmp(cFileFormat, SS_FORMAT) == 0) {
 
 				char cFilePrefix[5];
-				strncpy(cFilePrefix, dir->d_name, 4);
+				strncpy(cFilePrefix, rootDirEnt->d_name, 4);
 				cFilePrefix[4] = '\0';
-				
-				printf("%s\n", cFilePrefix);
 
-				char cFilePath[strlen(dir->d_name) + 1];
+				char cFilePath[14];
 				strcpy(cFilePath, "/");
-				strcat(cFilePath, dir->d_name);
+				strcat(cFilePath, rootDirEnt->d_name);
 
-				// Code below is unfinied
-				getFileTime(cFilePath);
+				char cFileTimeStr[16];
+				getFileTimeStr(cFilePath, cFileTimeStr);
 
-				if (strcmp(cFilePrefix, TOP_SS_NAME_PREFIX) == 0) {
-
-				} else if (strcmp(cFilePrefix, BOT_SS_NAME_PREFIX) == 0) {
-
+				char cTargetDir[49];
+				strcpy(cTargetDir, TARGET_DIR);
+				strcat(cTargetDir, TARGET_PREFIX);
+				strcat(cTargetDir, cFileTimeStr);
+				if (strcmp(cFilePrefix, TOP_PREFIX) == 0) {
+					strcat(cTargetDir, TOP_TARGET_SUFFIX);
+				} else if (strcmp(cFilePrefix, BOT_PREFIX) == 0) {
+					strcat(cTargetDir, BOT_TARGET_SUFFIX);
+				} else {
+					break;
 				}
+				strcat(cTargetDir, SS_FORMAT);
+
+				if(rename(cFilePath, cTargetDir) == 0)
+					printf("Moved %s to %s\n", cFilePath, cTargetDir);
 			}
 		}
 
-		closedir(d);
+		closedir(rootDir);
 	}
 }
 
@@ -59,8 +81,8 @@ int main(int argc, char **argv) {
 	gfxInitDefault();
 	consoleInit(GFX_TOP, NULL);
 
-	printf("Press A to fail\n");
-	printf("Press START to rage quit\n");
+	printf("Press A to move NTR Screenshots\n");
+	printf("Press START to quit\n");
 
 	// Main loop
 	while (aptMainLoop()) {
@@ -73,7 +95,7 @@ int main(int argc, char **argv) {
 			break; // break in order to return to hbmenu
 
 		if (kDown & KEY_A)
-			mvFiles();
+			mvSSFiles();
 
 		// Flush and swap framebuffers
 		gfxFlushBuffers();

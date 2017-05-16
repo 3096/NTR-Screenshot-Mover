@@ -5,11 +5,19 @@ A simple 3DS homebrew app to move NTR Screenshots out of SD root directory.
 
 NTR uses a naming convention of "top/bot_<INDEX>.bmp", which means that everytime NTR boots, it needs to scan the entire directory of screenshots in order to figure out the index. This process, plus 3DS's slow file system, can take up to **minutes** when there are a lot of screenshot. Plus in general, having that many files in the SD root directory is not a good idea.
 
+## Dude your code sucks!
+
+I have never actually learned C, and my knowledge about how memories or pointers work is very limited. Please create an [issue](https://github.com/3096/NTR-Screenshot-Mover/issues/new) if you see something wrong and want to help me improve!
+
+## Current Implemented Features:
+
+- Move NTR screenshot files to `/Screenshots`
+- Detect file's last modified time for naming
+
 ## To do list:
 
-- Actually move something (WIP)
-- Detect time of when the file is created for naming (WIP)
 - Optionally, launch BootNTRSelector when done
+- Custom paths
 
 ## Possible features, no guarantee:
 
@@ -22,5 +30,6 @@ NTR uses a naming convention of "top/bot_<INDEX>.bmp", which means that everytim
 Make sure you have:
 
 - devkitPro with devkitARM
+- libctru
 
 `make`
