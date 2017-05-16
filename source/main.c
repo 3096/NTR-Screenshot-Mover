@@ -63,12 +63,14 @@ void mvSSFiles() {
 				} else if (strcmp(cFilePrefix, BOT_PREFIX) == 0) {
 					strcat(cTargetDir, BOT_TARGET_SUFFIX);
 				} else {
-					break;
+					continue;
 				}
 				strcat(cTargetDir, SS_FORMAT);
 
 				if(rename(cFilePath, cTargetDir) == 0)
 					printf("Moved %s to\n %s\n", cFilePath, cTargetDir);
+				else
+					printf("Failed to move %s\n", cFilePath);
 			}
 		}
 
