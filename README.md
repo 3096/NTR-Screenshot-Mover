@@ -7,12 +7,16 @@ NTR uses a naming convention of "top/bot_<INDEX>.bmp", which means that everytim
 
 ## Dude your code sucks!
 
-I have never actually learned C, and my knowledge about how memories or pointers work is very limited. Please create an [issue](https://github.com/3096/NTR-Screenshot-Mover/issues/new) if you see something wrong and want to help me improve!
+I am still a beginner at programming. Please create an [issue](https://github.com/3096/NTR-Screenshot-Mover/issues/new) if you see something bad and want to help me learn and improve!
 
 ## Current Implemented Features:
 
 - Move NTR screenshot files to `/Screenshots`
 - Detect file's last modified time for naming
+
+## Know issue:
+- The moving process is still very slow if the target directory is crowded.
+    - Looks like 3DS file system just doesn't work well that way. 
 
 ## To do list:
 
@@ -23,7 +27,7 @@ I have never actually learned C, and my knowledge about how memories or pointers
 ## Possible features, no guarantee:
 
 - Combine top and bottom screen
-- Convert to png format (I think I saw a png lib, not sure if it can do this tho)
+- Convert to png format
 - Gallery style preview
 
 ## Building:

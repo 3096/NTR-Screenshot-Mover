@@ -17,14 +17,13 @@ void getFileTimeStr(char * filePath, char * timeStr) {
 
 // move screenshot files
 void mvSSFiles() {
-    const char *TOP_PREFIX = "top_";
-    const char *BOT_PREFIX = "bot_";
+    const char *TOP_PREFIX = "top";
+    const char *TOP_RIGHT_PREFIX = "top_right";
+    const char *BOT_PREFIX = "bot";
     const char *SS_FORMAT = ".bmp";
 
-    const char *TARGET_DIR = "/Screenshots/";
+    const char *TARGET_DIR = "sdmc:/Screenshots/";
     const char *TARGET_PREFIX = "Screenshot_";
-    const char *TOP_TARGET_SUFFIX = "-top";
-    const char *BOT_TARGET_SUFFIX = "-bot";
 
     // check if Screenshots dir exists
     struct stat st = {0};
@@ -34,7 +33,7 @@ void mvSSFiles() {
 
     DIR           *rootDir;
     struct dirent *rootDirEnt;
-    rootDir = opendir("/");
+    rootDir = opendir("sdmc:/");
 
     if (rootDir)
     {
@@ -43,34 +42,47 @@ void mvSSFiles() {
             char *cFileFormat = strrchr(rootDirEnt->d_name, '.');
             if(cFileFormat && strcmp(cFileFormat, SS_FORMAT) == 0) {
 
-                char cFilePrefix[5];
-                strncpy(cFilePrefix, rootDirEnt->d_name, 4);
-                cFilePrefix[4] = '\0';
+                char cFilePrefix[10];
+                strncpy(cFilePrefix, rootDirEnt->d_name, 9);
+                if (cFilePrefix[4] > 57)
+                    cFilePrefix[9] = '\0';
+                else {
+                    cFilePrefix[3] = '\0';
+                }
 
-                char cFilePath[14];
-                strcpy(cFilePath, "/");
+                if (strcmp(cFilePrefix, TOP_PREFIX) != 0 &&
+                    strcmp(cFilePrefix, TOP_RIGHT_PREFIX) != 0 &&
+                    strcmp(cFilePrefix, BOT_PREFIX) != 0)
+                    continue;
+
+                char cFilePath[25];
+                strcpy(cFilePath, "sdmc:/");
                 strcat(cFilePath, rootDirEnt->d_name);
+                // eg "sdmc:/top_right_0000.bmp"
 
                 char cFileTimeStr[16];
                 getFileTimeStr(cFilePath, cFileTimeStr);
 
-                char cTargetDir[49];
+                char cTargetDir[61];
                 strcpy(cTargetDir, TARGET_DIR);
                 strcat(cTargetDir, TARGET_PREFIX);
                 strcat(cTargetDir, cFileTimeStr);
-                if (strcmp(cFilePrefix, TOP_PREFIX) == 0) {
-                    strcat(cTargetDir, TOP_TARGET_SUFFIX);
-                } else if (strcmp(cFilePrefix, BOT_PREFIX) == 0) {
-                    strcat(cTargetDir, BOT_TARGET_SUFFIX);
-                } else {
-                    continue;
-                }
+                strcat(cTargetDir, "_");
+                strcat(cTargetDir, cFilePrefix);
                 strcat(cTargetDir, SS_FORMAT);
+                // eg "sdmc:/Screenshots/Screenshot_20161127-143154_top_right.bmp"
 
                 if(rename(cFilePath, cTargetDir) == 0)
                     printf("Moved %s to\n %s\n", cFilePath, cTargetDir);
-                else
-                    printf("Failed to move %s\n", cFilePath);
+                else{
+                    cTargetDir[strlen(cTargetDir)-strlen(SS_FORMAT)] = '\0';
+                    strcat(cTargetDir, "_1");
+                    strcat(cTargetDir, SS_FORMAT);
+                    if(rename(cFilePath, cTargetDir) == 0)
+                        printf("Moved %s to\n %s\n", cFilePath, cTargetDir);
+                    else
+                        printf("Failed to move %s\n", cFilePath);
+                }
             }
         }
 
