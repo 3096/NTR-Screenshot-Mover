@@ -40,16 +40,25 @@ void mvSSFiles() {
         while ((rootDirEnt = readdir(rootDir)) != NULL)
         {
             char *cFileFormat = strrchr(rootDirEnt->d_name, '.');
+
             if(cFileFormat && strcmp(cFileFormat, SS_FORMAT) == 0) {
 
-                char cFilePrefix[10];
-                strncpy(cFilePrefix, rootDirEnt->d_name, 9);
-                if (cFilePrefix[4] > 57)
-                    cFilePrefix[9] = '\0';
-                else {
-                    cFilePrefix[3] = '\0';
+                char cFilePrefix[10], cFileIndex[5];
+                int cIndexPos = 0;
+                for (int i = 0; i < strlen(rootDirEnt->d_name); i++){
+                    if (rootDirEnt->d_name[i] >= 48 && rootDirEnt->d_name[i] <= 57){
+                        cIndexPos = i;
+                        break;
+                    }
                 }
-
+                if (cIndexPos) {
+                    strncpy(cFilePrefix, rootDirEnt->d_name, cIndexPos-1);
+                    cFilePrefix[cIndexPos-1] = '\0';
+                    memcpy(cFileIndex, &rootDirEnt->d_name[cIndexPos], 4);
+                    cFileIndex[4] = '\0';
+                } else
+                    continue;
+                
                 if (strcmp(cFilePrefix, TOP_PREFIX) != 0 &&
                     strcmp(cFilePrefix, TOP_RIGHT_PREFIX) != 0 &&
                     strcmp(cFilePrefix, BOT_PREFIX) != 0)
@@ -63,23 +72,25 @@ void mvSSFiles() {
                 char cFileTimeStr[16];
                 getFileTimeStr(cFilePath, cFileTimeStr);
 
-                char cTargetDir[61];
+                char cTargetDir[66];
                 strcpy(cTargetDir, TARGET_DIR);
                 strcat(cTargetDir, TARGET_PREFIX);
                 strcat(cTargetDir, cFileTimeStr);
                 strcat(cTargetDir, "_");
                 strcat(cTargetDir, cFilePrefix);
+                strcat(cTargetDir, "_");
+                strcat(cTargetDir, cFileIndex);
                 strcat(cTargetDir, SS_FORMAT);
-                // eg "sdmc:/Screenshots/Screenshot_20161127-143154_top_right.bmp"
+                // eg "sdmc:/Screenshots/Screenshot_20161127-143154_top_right_0000.bmp"
 
                 int endNum = 1, maxAttempt = 10;
                 while(rename(cFilePath, cTargetDir) != 0 && endNum < maxAttempt){
-                    endNum++;
-                    
                     cTargetDir[strlen(cTargetDir)-strlen(SS_FORMAT)] = '\0';
                     strcat(cTargetDir, "_X");
                     cTargetDir[strlen(cTargetDir)-1] = 48 + endNum;
                     strcat(cTargetDir, SS_FORMAT);
+                    
+                    endNum++;
                 }
 
                 if(endNum < maxAttempt)

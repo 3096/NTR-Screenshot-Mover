@@ -17,18 +17,17 @@ I am still a beginner at programming. Please create an [issue](https://github.co
 ## Known issue:
 - The moving process is still very slow if the target directory is crowded.
     - Looks like 3DS file system just doesn't work well that way. Will need to create more directories.
+- NTR screenshot seems to sometimes have a random 2 second delay on top screen. The program needs to find all screens from the same shot by index and apply the same timestamp.
 
 ## To do list:
 
 - Figure out how to build .cia
 - Optionally, launch BootNTRSelector when done
-- Custom paths
-
-## Possible features, no guarantee:
-
+- Custom paths (also luma screenshot support)
+- .zip packing
 - Combine top and bottom screen
 - Convert to png format
-- Gallery style preview
+- Display remaining time
 
 ## Building:
 
