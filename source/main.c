@@ -72,17 +72,20 @@ void mvSSFiles() {
                 strcat(cTargetDir, SS_FORMAT);
                 // eg "sdmc:/Screenshots/Screenshot_20161127-143154_top_right.bmp"
 
-                if(rename(cFilePath, cTargetDir) == 0)
-                    printf("Moved %s to\n %s\n", cFilePath, cTargetDir);
-                else{
+                int endNum = 1, maxAttempt = 10;
+                while(rename(cFilePath, cTargetDir) != 0 && endNum < maxAttempt){
+                    endNum++;
+                    
                     cTargetDir[strlen(cTargetDir)-strlen(SS_FORMAT)] = '\0';
-                    strcat(cTargetDir, "_1");
+                    strcat(cTargetDir, "_X");
+                    cTargetDir[strlen(cTargetDir)-1] = 48 + endNum;
                     strcat(cTargetDir, SS_FORMAT);
-                    if(rename(cFilePath, cTargetDir) == 0)
-                        printf("Moved %s to\n %s\n", cFilePath, cTargetDir);
-                    else
-                        printf("Failed to move %s\n", cFilePath);
                 }
+
+                if(endNum < maxAttempt)
+                    printf("Moved %s to\n %s\n", cFilePath, cTargetDir);
+                else
+                        printf("Failed to move %s\n", cFilePath);
             }
         }
 

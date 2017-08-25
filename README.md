@@ -14,9 +14,9 @@ I am still a beginner at programming. Please create an [issue](https://github.co
 - Move NTR screenshot files to `/Screenshots`
 - Detect file's last modified time for naming
 
-## Know issue:
+## Known issue:
 - The moving process is still very slow if the target directory is crowded.
-    - Looks like 3DS file system just doesn't work well that way. 
+    - Looks like 3DS file system just doesn't work well that way. Will need to create more directories.
 
 ## To do list:
 
