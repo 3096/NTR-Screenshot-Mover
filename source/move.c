@@ -10,13 +10,30 @@ void getFileTimeStr(char * filePath, char * timeStr) {
     return;
 }
 
-bool mvSSFile(char * fileDir, char * targetDir, char * resultStr) {
-    if(rename(fileDir, targetDir) == 0) {
-        sprintf(resultStr, "Moved %s to\n %s\n", fileDir, targetDir);
+const char *SS_FORMAT = ".bmp";
+const char *SOURCE_DIR = "sdmc:/";
+const char *TARGET_DIR = "sdmc:/Screenshots/";
+const char *TARGET_PREFIX = "Screenshot";
+
+bool mvSSFile(char * fileIndex, char * timeStr, const char * filePrefix, char * resultStr) {
+    char filePath[25];
+    sprintf(filePath, "%s%s_%s%s", SOURCE_DIR, filePrefix, fileIndex, SS_FORMAT);
+    // eg "sdmc:/top_right_0000.bmp"
+    
+    // TO DO: check file exists
+
+    char targetPath[66];
+    sprintf(targetPath, 
+        "%s"        "%s_"           "%s_"       "%s_"       "%s"        "%s", 
+        TARGET_DIR, TARGET_PREFIX,  timeStr,    filePrefix, fileIndex,  SS_FORMAT);
+    // eg "sdmc:/Screenshots/Screenshot_20161127-143154_top_right_0000.bmp"
+
+    if(rename(filePath, targetPath) == 0) {
+        sprintf(resultStr, "Moved %s to\n %s\n", filePath, targetPath);
         return true;
     }
     else {
-        sprintf(resultStr, "Failed to move %s\n", fileDir);
+        sprintf(resultStr, "Failed to move %s\n", filePath);
         return false;
     }
 }
@@ -26,11 +43,6 @@ void startMvSS() {
     const char *TOP_PREFIX = "top";
     const char *TOP_RIGHT_PREFIX = "top_right";
     const char *BOT_PREFIX = "bot";
-    const char *SS_FORMAT = ".bmp";
-
-    const char *SOURCE_DIR = "sdmc:/";
-    const char *TARGET_DIR = "sdmc:/Screenshots/";
-    const char *TARGET_PREFIX = "Screenshot";
 
     // check if Screenshots dir exists
     struct stat st = {0};
@@ -73,22 +85,20 @@ void startMvSS() {
                     strcmp(cFilePrefix, TOP_RIGHT_PREFIX) != 0 &&
                     strcmp(cFilePrefix, BOT_PREFIX) != 0)
                     continue;
-
+                
                 char cFilePath[25];
                 sprintf(cFilePath, "%s%s", SOURCE_DIR, cFileName);
                 // eg "sdmc:/top_right_0000.bmp"
 
-                char cFileTimeStr[16];
-                getFileTimeStr(cFilePath, cFileTimeStr);
-
-                char cTargetDir[66];
-                sprintf(cTargetDir, 
-                    "%s"        "%s_"           "%s_"           "%s_"        "%s"        "%s", 
-                    TARGET_DIR, TARGET_PREFIX,  cFileTimeStr,   cFilePrefix, cFileIndex, SS_FORMAT);
-                // eg "sdmc:/Screenshots/Screenshot_20161127-143154_top_right_0000.bmp"
+                char cSSTimeStr[16];
+                getFileTimeStr(cFilePath, cSSTimeStr);
 
                 char resultStr[0x100];
-                mvSSFile(cFilePath, cTargetDir, resultStr);
+                mvSSFile(cFileIndex, cSSTimeStr, TOP_PREFIX, resultStr);
+                printf("%s\n", resultStr);
+                mvSSFile(cFileIndex, cSSTimeStr, TOP_RIGHT_PREFIX, resultStr);
+                printf("%s\n", resultStr);
+                mvSSFile(cFileIndex, cSSTimeStr, BOT_PREFIX, resultStr);
                 printf("%s\n", resultStr);
             }
         }
