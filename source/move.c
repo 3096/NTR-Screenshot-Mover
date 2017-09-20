@@ -20,7 +20,10 @@ bool mvSSFile(char * fileIndex, char * timeStr, const char * filePrefix, char * 
     sprintf(filePath, "%s%s_%s%s", SOURCE_DIR, filePrefix, fileIndex, SS_FORMAT);
     // eg "sdmc:/top_right_0000.bmp"
     
-    // TO DO: check file exists
+    if (access(filePath, F_OK) == -1) {
+        sprintf(resultStr, "%s does not exist\n", filePath);
+        return false;
+    }
 
     char targetPath[66];
     sprintf(targetPath, 
@@ -28,7 +31,7 @@ bool mvSSFile(char * fileIndex, char * timeStr, const char * filePrefix, char * 
         TARGET_DIR, TARGET_PREFIX,  timeStr,    filePrefix, fileIndex,  SS_FORMAT);
     // eg "sdmc:/Screenshots/Screenshot_20161127-143154_top_right_0000.bmp"
 
-    if(rename(filePath, targetPath) == 0) {
+    if (rename(filePath, targetPath) == 0) {
         sprintf(resultStr, "Moved %s to\n %s\n", filePath, targetPath);
         return true;
     }
@@ -54,16 +57,20 @@ void startMvSS() {
     struct dirent *sourceDirEnt;
     sourceDir = opendir(SOURCE_DIR);
 
-    if (sourceDir)
-    {
-        while ((sourceDirEnt = readdir(sourceDir)) != NULL)
-        {
+    if (sourceDir) {
+        while ((sourceDirEnt = readdir(sourceDir)) != NULL) {
             char cFileName[19]; 
             strncpy(cFileName, sourceDirEnt->d_name, 18);
             cFileName[18] = '\0';
             char *cFileFormat = strrchr(cFileName, '.');
 
             if(cFileFormat && strcmp(cFileFormat, SS_FORMAT) == 0) {
+                char cFilePath[25];
+                sprintf(cFilePath, "%s%s", SOURCE_DIR, cFileName);
+                // eg "sdmc:/top_right_0000.bmp"
+
+                if (access(cFilePath, F_OK) == -1)
+                    continue;
 
                 char cFilePrefix[10], cFileIndex[5];
                 int cIndexPos = 0;
@@ -85,10 +92,6 @@ void startMvSS() {
                     strcmp(cFilePrefix, TOP_RIGHT_PREFIX) != 0 &&
                     strcmp(cFilePrefix, BOT_PREFIX) != 0)
                     continue;
-                
-                char cFilePath[25];
-                sprintf(cFilePath, "%s%s", SOURCE_DIR, cFileName);
-                // eg "sdmc:/top_right_0000.bmp"
 
                 char cSSTimeStr[16];
                 getFileTimeStr(cFilePath, cSSTimeStr);
@@ -100,6 +103,8 @@ void startMvSS() {
                 printf("%s\n", resultStr);
                 mvSSFile(cFileIndex, cSSTimeStr, BOT_PREFIX, resultStr);
                 printf("%s\n", resultStr);
+
+                sourceDir = opendir(SOURCE_DIR);
             }
         }
 
