@@ -1,4 +1,4 @@
-# NTR-Screenshot-Mover
+# NTR Screenshot Mover ![# NTR Screenshot Mover](https://github.com/3096/NTR-Screenshot-Mover/raw/master/meta/icon.png)
 A simple 3DS homebrew app to move NTR Screenshots out of SD root directory.
 
 ## Why?
@@ -23,10 +23,9 @@ I am still a beginner at programming. Please create an [issue](https://github.co
 - Figure out how to build .cia
 - Optionally, launch BootNTRSelector when done
 - Custom paths (also luma screenshot support)
-- .zip packing
 - Combine top and bottom screen
 - Convert to png format
-- Display remaining time
+- Better UI and scrollable
 
 ## Building:
 
