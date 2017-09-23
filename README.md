@@ -1,4 +1,4 @@
-# NTR Screenshot Mover ![# NTR Screenshot Mover](https://github.com/3096/NTR-Screenshot-Mover/raw/master/meta/icon.png)
+#![# NTR Screenshot Mover](https://github.com/3096/NTR-Screenshot-Mover/raw/master/meta/icon.png) NTR Screenshot Mover
 A simple 3DS homebrew app to move NTR Screenshots out of SD root directory.
 
 ## Why?
@@ -8,7 +8,7 @@ NTR uses a naming convention of "top/bot_<INDEX>.bmp", which means that everytim
 ## Dude your code sucks!
 
 I am still a beginner at programming. Please create an [issue](https://github.com/3096/NTR-Screenshot-Mover/issues/new) if you see something bad and want to help me learn and improve!
-
+---
 ## Current Implemented Features:
 
 - Move NTR screenshot files to `/Screenshots`
@@ -26,7 +26,8 @@ I am still a beginner at programming. Please create an [issue](https://github.co
 - Combine top and bottom screen
 - Convert to png format
 - Better UI and scrollable
-
+    - Display result (how many files were moved, etc.)
+---
 ## Building:
 
 Make sure you have:
@@ -35,3 +36,8 @@ Make sure you have:
 - libctru
 
 `make`
+---
+## Credits:
+
+- Hardworking people who created the libraries used here
+- Helpful people on [Nintendo Homebrew Discord](https://discord.gg/C29hYvh) #Dev channel
