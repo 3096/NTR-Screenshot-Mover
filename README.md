@@ -1,4 +1,4 @@
-![# NTR Screenshot Mover](https://github.com/3096/NTR-Screenshot-Mover/raw/master/meta/icon.png)# NTR Screenshot Mover
+# ![# NTR Screenshot Mover](https://github.com/3096/NTR-Screenshot-Mover/raw/master/meta/icon.png) NTR Screenshot Mover
 
 A simple 3DS homebrew app to move NTR Screenshots out of SD root directory.
 

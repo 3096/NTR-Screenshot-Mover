@@ -15,9 +15,11 @@ const char *SOURCE_DIR = "sdmc:/";
 const char *TARGET_DIR = "sdmc:/Screenshots/";
 const char *TARGET_PREFIX = "Screenshot";
 
-bool mvSSFile(char * fileIndex, char * timeStr, const char * filePrefix, char * resultStr) {
+bool mvSSFile(char * fileIndex, char * timeStr, 
+    const char * filePrefix, char * resultStr) {
     char filePath[25];
-    sprintf(filePath, "%s%s_%s%s", SOURCE_DIR, filePrefix, fileIndex, SS_FORMAT);
+    sprintf(filePath, "%s%s_%s%s", 
+        SOURCE_DIR, filePrefix, fileIndex, SS_FORMAT);
     // eg "sdmc:/top_right_0000.bmp"
     
     if (access(filePath, F_OK) == -1) {
@@ -27,8 +29,8 @@ bool mvSSFile(char * fileIndex, char * timeStr, const char * filePrefix, char * 
 
     char targetPath[66];
     sprintf(targetPath, 
-        "%s"        "%s_"           "%s_"       "%s_"       "%s"        "%s", 
-        TARGET_DIR, TARGET_PREFIX,  timeStr,    filePrefix, fileIndex,  SS_FORMAT);
+        "%s"        "%s_"          "%s_"    "%s_"       "%s"        "%s", 
+        TARGET_DIR, TARGET_PREFIX, timeStr, filePrefix, fileIndex,  SS_FORMAT);
     // eg "sdmc:/Screenshots/Screenshot_20161127-143154_top_right_0000.bmp"
 
     if (rename(filePath, targetPath) == 0) {
@@ -47,7 +49,6 @@ void startMvSS() {
     const char *TOP_RIGHT_PREFIX = "top_right";
     const char *BOT_PREFIX = "bot";
 
-    // check if Screenshots dir exists
     struct stat st = {0};
     if (stat(TARGET_DIR, &st) == -1) {
         mkdir(TARGET_DIR, 0700);
