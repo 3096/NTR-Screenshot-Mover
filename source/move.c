@@ -17,7 +17,7 @@ const char *TARGET_PREFIX = "Screenshot";
 
 bool mvSSFile(char * fileIndex, char * timeStr, 
     const char * filePrefix, char * resultStr) {
-    char filePath[25];
+    char filePath[0x100];
     sprintf(filePath, "%s%s_%s%s", 
         SOURCE_DIR, filePrefix, fileIndex, SS_FORMAT);
     // eg "sdmc:/top_right_0000.bmp"
@@ -27,7 +27,7 @@ bool mvSSFile(char * fileIndex, char * timeStr,
         return false;
     }
 
-    char targetPath[66];
+    char targetPath[0x100];
     sprintf(targetPath, 
         "%s"        "%s_"          "%s_"    "%s_"       "%s"        "%s", 
         TARGET_DIR, TARGET_PREFIX, timeStr, filePrefix, fileIndex,  SS_FORMAT);
@@ -66,7 +66,7 @@ void startMvSS() {
             char *cFileFormat = strrchr(cFileName, '.');
 
             if(cFileFormat && strcmp(cFileFormat, SS_FORMAT) == 0) {
-                char cFilePath[25];
+                char cFilePath[0x100];
                 sprintf(cFilePath, "%s%s", SOURCE_DIR, cFileName);
                 // eg "sdmc:/top_right_0000.bmp"
 
@@ -104,8 +104,6 @@ void startMvSS() {
                 printf("%s\n", resultStr);
                 mvSSFile(cFileIndex, cSSTimeStr, BOT_PREFIX, resultStr);
                 printf("%s\n", resultStr);
-
-                sourceDir = opendir(SOURCE_DIR);
             }
         }
 
