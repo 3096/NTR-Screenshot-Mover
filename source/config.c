@@ -18,8 +18,14 @@ void resetConfig() {
 void configInit() {
     struct stat st = {0};
 
-    if (stat(CONFIG_FILE_DIR, &st) == -1)
+    if (stat(CONFIG_FILE_DIR, &st) == -1) {
         mkdir(CONFIG_FILE_DIR, 0700);
+        resetConfig();
+        return;
+    }
+    else {
+        //read
+    }
 
     //if (stat(TARGET DIRECTORY, &st) == -1)
     //    mkdir(TARGET DIRECTORY, 0700);

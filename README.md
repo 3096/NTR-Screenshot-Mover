@@ -2,6 +2,12 @@
 
 A simple 3DS homebrew app to move NTR Screenshots out of SD root directory.
 
+## NOTICE: This project has been put on hold indefinitely.
+
+Practical testing has shown a signifigant slow down to ALL sdmc file operations caused by this program when a large amount of screenshots are moved. It likely is a result of FAT32 file system and/or the way 3DS handles it. (I'm not too familiar down to the technical stuffs.) 
+
+Also, the circumstances surrounding [NTR CFW](https://github.com/44670/NTR) has changed: it's now open source! As soon as they sort out building it, I will look into forking a version that saves screenshots directly to a directory and naming it with timestamps, which was always the better solution I wanted anyway.
+
 ## Why?
 
 NTR uses a naming convention of "top/bot_<INDEX>.bmp", which means that everytime NTR boots, it needs to scan the entire directory of screenshots in order to figure out the index. This process, plus 3DS's slow file system, can take up to **minutes** when there are a lot of screenshot. Plus in general, having that many files in the SD root directory is not a good idea.
